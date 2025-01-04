@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MDCOMPANY - FIND NAME</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <style>
+
+  </style>
+</head>
+<body>
+<th:block th:replace="~{layout/header :: header}"></th:block>
+
+<div class="find-container">
+  <form action="/find-email-result" method="get" id="checkEmail">
+    <label for="username">이름 :</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="gender">성별</label>
+    <select name="gender" id="gender">
+      <option type="radio" name="gender" value="남성">남성</option>
+      <option type="radio" name="gender" value="여성">여성</option>
+    </select>
+    <button type="submit">이메일 찾기</button>
+  </form>
+</div>
+<th:block th:replace="~{layout/footer :: footer}"></th:block>
+</body>
+</html>

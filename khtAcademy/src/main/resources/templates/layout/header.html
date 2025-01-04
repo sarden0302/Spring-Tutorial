@@ -1,0 +1,16 @@
+<header th:fragment="header">
+    <div class="logo">
+    </div>
+    <nav class="header-nav">
+        <a href="/">메인</a>
+        <a href="/find-username">유저이름찾기</a>
+    </nav>
+    <!-- 로그인 후 로그아웃으로 변동해야 하기 때문에 따로 분리함-->
+    <div class="sign-in">
+        <a th:if="${loggedInUser == null}" href="/register">회원가입</a>
+        <a th:if="${loggedInUser == null}" href="/login">로그인</a>
+
+        <a th:if="${loggedInUser != null}" href="/mypage">마이페이지</a>
+        <a th:if="${loggedInUser != null}" href="/logout">로그아웃</a>
+    </div>
+</header>

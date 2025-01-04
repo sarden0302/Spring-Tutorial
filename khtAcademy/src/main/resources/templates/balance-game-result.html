@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>밸런스 게임 결과</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script src="/js/script.js" defer></script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="result-container">
+    <div th:insert="~{header :: header}"></div>
+    <div class="result-content">
+        <h1>밸런스 게임 결과!</h1>
+
+        <div class="card-container">
+            <div class="card">
+                <img src="/images/C.png" alt="Health Card">
+                <span>건강운</span>
+                <p th:text="${result['C']}"></p>
+            </div>
+            <div class="card">
+                <img src="/images/D.png" alt="Money Card">
+                <span>재물운</span>
+                <p th:text="${result['D']}"></p>
+            </div>
+            <div class="card">
+                <img src="/images/S.png" alt="Study Card">
+                <span>학업운</span>
+                <p th:text="${result['S']}"></p>
+            </div>
+            <div class="card">
+                <img src="/images/H.png" alt="Love Card">
+                <span>연애운</span>
+                <p th:text="${result['H']}"></p>
+            </div>
+        </div>
+    </div>
+    <div th:insert="~{footer :: footer}"></div>
+</div>
+</body>
+</html>

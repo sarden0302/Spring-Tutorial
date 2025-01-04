@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xml:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MDCOMPANY - 회원가입</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <th:block th:replace="~{layout/header :: header}"></th:block>
+
+    <!--
+    id   -> JavaScript 기능이나 label for 와 태그를 연결짓는데 주로 사용
+    name -> Java 내 존재하는 Controller에 태그 사용자가 선택하거나 작성한 속성 값을 키-값으로 전달
+            name = 키 value = 속성
+
+            input 태그 내에는 기본적으로 value 라는 기능이 설정되어 있음
+            사용자 닉네임 이름 비밀번호 와 같이 사용자가 직접적으로 값을 설정해주어야 하는 input 태그에는
+            value 값을 직접적으로 개발자가 작성해서 임의 값을 설정해놓지 않는다
+            하지만, checkbox, radio, select-option 과 같이 개발자가 지정한 선택지 내에서 사용자가
+            선택해 제출하기 원하는 경우에는 value 값을 지정해 줘야한다.
+            value 값을 개발자가 원하는 값으로 작성해서 사용
+
+            아래와 같이 value="" 형식으로 기본적으로 value 가 내장되어 있음 (default 값)
+            <input type="text" id="username" name="username" value="" required>
+
+            <input type="text" id="username" name="username" value="안녕하세요." required>
+            -> Controller 내에서 전송시 유저가 작성 안했을 시 default 값으로 "안녕하세요."로 정의된다.
+
+            Controller 에서는 name, value 만 바라봄!!!
+    -->
+    <div class="register-container">
+        <!--
+        enctype = form 데이터를 전송할 때 글자타입만 작성이 되어 있는지,
+                                       글자 이외 다른 형식이 작성 되어있는지 작성하는 기능
+           [종류]
+                x-www : text 로 전송
+                json : key && value 로 전송
+                application/x-www-form-urlencoded : 기본타입
+                                                    폼 데이터가 키-값 쌍으로 URL 인코딩되어 전송
+                                                    공백 -> + && 특수문자 -> % 로 인코딩
+                                                    키1=값1&키2=값2
+                                                    파일 업로드를 지원하지 않음
+                                                    [사용] 텍스트 글자, 드롭다운, 체크박스 등 기본 글자 데이터 전송
+
+                multipart/form-data               : 폼 데이터를 여러 부분으로 나누어 전송
+                                                    텍스트와 파일 데이터를 함께 전송할 수 있음
+                                                    [사용] 글자 이외 추가 업로드(파일 업로드, 이미지 업로드) 할 때 사용
+
+                text/plain                        : 데이터를 단순 텍스트 형식으로 전송
+                                                    공백은 그대로 유지되고, 특수 문자는 인코딩이 되지 않음
+                                                    [사용] 디버깅(문제찾는) 용도 또는 단순히 온전한 글자 데이터만 전송
+        -->
+        <form action="/register-success" method="post" enctype="application/x-www-form-urlencoded">
+            <div>
+                <label for="username">이름</label>
+                <!--
+                    label 태그는 사용자가 label의 for와 연결된 input 태그와 연결하는 문구
+                -->
+                <!--
+                    name : controller에서 @RequestParam으로 사용
+                        -> User 객체로 받을시 User의 field 값과 동일해야한다.
+                    id 이름은 js 에서 사용하기 위해 필요한 정보
+                -->
+                <input type="text" id="username" name="username" value="" required>
+                <button type="button" id="checkBtn">중복확인</button>
+                <p id="checkResult" style="color : red; font-size : 14px"></p>
+            </div>
+
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="birthdate">생년월일</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+
+            <label for="accountBalance">계좌 잔액</label>
+            <input type="number" id="accountBalance" name="accountBalance" required>
+
+            <label>성별</label> <!-- 연결해서 성별을 눌렀을 때 버튼처럼 사용될 것이 없기 때문에 for(id와 연결) 작성x -->
+            <label>
+                <input type="radio" id="male" name="gender" value="MALE"> 남성
+            </label>
+            <label>
+                <input type="radio" id="female" name="gender" value="FEMALE"> 여성
+            </label>
+
+            <label for="hobbies">취미</label>
+            <select id="hobbies" name="hobbies" required>
+                <option value="READING">독서</option>
+                <option value="SPORTS">운동</option>
+                <option value="RUNNING">달리기</option>
+            </select>
+            <label for="profileImagePath" class="file-label">프로필사진 설정하기</label>
+            <input type="file" id="profileImagePath" name="profileImagePath">
+            <!-- button의 기본 타입(default) : submit
+                정규식대로 작성 확인 -> type="button"으로 변경하고
+                자바스크리븥 id나 기능설정이름 작성 후
+                e.preventDefault() 코드를 맨 윗줄에 넣어 제출과 같은 동작 지연
+            -->
+            <button type="submit">가입하기</button>
+        </form>
+    </div>
+    <script>
+        /**
+         * class 명칭을 가져올 때는 : .
+         * id 명칭을 가져올 때는 : #
+         * 태그는 아무것도 붙이지 않고 가져옴
+         */
+        $(document).ready(function() {
+            $('#checkBtn').click(function() {
+                const username = $('#username').val();
+                if (!username) {
+                    alert('유저 이름을 입력하세요');
+                    return; // 유저 이름이 빈 값이기 때문에 돌려보내기
+                }
+
+                $.ajax({
+                    url : '/check-username',
+                    type : 'POST',
+                    data : {username:username},
+                    success : function(response) {
+                       if(response.isDuplicate) {
+                           $('#checkResult').text('이미 사용 중인 유저 이름입니다.');
+                       } else {
+                           $('#checkResult').text('사용 가능한 유저 이름입니다.').css('color', 'green');
+                       }
+                    },
+                    error: function() {
+                       alert('서버 요청 중 오류가 발생했습니다. 유저네임 중복확인 불가합니다.');
+                    }
+                });
+            });
+        })
+
+    </script>
+    <th:block th:replace="~{layout/footer :: footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MDCOMPANY - FIND NAME</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <style>
+
+    </style>
+</head>
+<body>
+<th:block th:replace="~{layout/header :: header}"></th:block>
+
+<div class="login-container">
+    <h1>로그인 페이지</h1>
+    <!-- form method = "get"
+    form을 통해 DB에 특정 값을 저장할 때 : post == insert
+    form을 통해 DB에 특정 값을 가져올 때  : get == select
+        action = 유저 이름 찾기 버튼을 눌렀을 때 이동할 페이지 endpoint 작성
+        endpoint = api(Application Programming Interface)
+    -->
+    <form action="/login" method="post">
+        <label for="username">유저 이름 :</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="email">이메일 :</label>
+        <input type="email" id="email" name="email" required>
+        <button>로그인</button>
+
+    </form>
+</div>
+<th:block th:replace="~{layout/footer :: footer}"></th:block>
+</body>
+</html>

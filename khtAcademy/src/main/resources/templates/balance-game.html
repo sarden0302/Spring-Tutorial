@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>밸런스 게임 화면</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script src="/js/script.js" defer></script>
+</head>
+<body>
+
+<div class="balance-container">
+    <div th:insert="~{header :: header}"></div>
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+
+    <form id="balance-game-form" th:action="@{/balance-game/submit}" method="post">
+        <div th:each="entry, iter : ${groupedQuestions.entrySet()}" th:object="${entry}" class="question hidden">
+            <h3>
+                <span th:text="${entry.key} + ' 번 ' "></span>
+                <br> <br>
+                <span th:text="${entry.value[0].problem}"></span>
+            </h3>
+            <div class="answer-options" th:each="question : ${entry.value}" th:object="${question}">
+                <label>
+                    <input type="radio" th:name="'userAnswer_' + ${question.questionNumber}" th:value="${question.questionNumber}" class="answer-option" required>
+                    <span th:text="${question.answer}"></span>
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
