@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +139,31 @@ public class IndexController {
      * Model model         = @PostMapping 에서는 로그인 실패했을 경우 실패 메세지만 전달
      * HttpSession session = @PostMapping 에서는 로그인 성공했을 경우 로그인한 유저 정보를 전달
      */
+
+    /**
+     *
+     * @param username
+     * @param email
+     * @param session
+     * @return
+     */
+    @PostMapping("/login")
+    @ResponseBody // JSON 형식으로 로그인에 대한 정보 받기
+    public Map<String, Object> login(@RequestParam String username, @RequestParam String email, HttpSession session) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        User user = userProfileService.login(username, email);
+
+        if(user != null) {
+            session.setAttribute("loggedInUser", user); // 로그인 성공했을 경우 session에서 loggedInUser 라는 이름으로 로그인 정보 저장
+            response.put("loggedIn", true);
+            response.put("message", "로그인 성공했습니다.");
+        } else {
+            response.put("loggedIn", false);
+            response.put("message", "로그인에 실패했습니다.");
+        }
+        return response;
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String email, Model model, HttpSession session) {
         // 유저 프로필 서비스 로그인을 진행했을 때에 대한 결과를 가져옴
@@ -200,6 +226,8 @@ public class IndexController {
         response.setContentType("application/json");
         response.getWriter().write("{\"isDuplicate\" : " + isDuplicate + "}");
     }
+
+
 
     /**
      * @GetMapping("/error")

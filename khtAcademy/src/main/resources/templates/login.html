@@ -1,12 +1,10 @@
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- document 문서타입 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>MDCOMPANY - FIND NAME</title>
     <link rel="stylesheet" href="/css/styles.css"/>
-    <style>
-
-    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <th:block th:replace="~{layout/header :: header}"></th:block>
@@ -19,16 +17,55 @@
         action = 유저 이름 찾기 버튼을 눌렀을 때 이동할 페이지 endpoint 작성
         endpoint = api(Application Programming Interface)
     -->
-    <form action="/login" method="post">
+    <form >
         <label for="username">유저 이름 :</label>
         <input type="text" id="username" name="username" required>
 
         <label for="email">이메일 :</label>
         <input type="email" id="email" name="email" required>
-        <button>로그인</button>
-
+        <button type="button" id="loginButton">로그인</button>
     </form>
+    <!-- 로그인에 문제가 생겼을 경우 문제 메세지 보여주기 -->
+    <p id="responseMessage" style="color: red;"></p>
 </div>
+<script>
+    /* jquery 부서에 만든 ajax 활용해서 새로고침하지 않고 로그인결과 성공/실패 확인 */
+    /* html 문서 = $(document)
+    * 대기하다 = ready
+    * 어떤행동을 = function(매개변수자리=event) {행동하기}
+    * */
+    $(document).ready(function() {
+        /* 특정 클래스, 아이디 or 태그를 클릭했을 때 수행할 기능 */
+        $('#loginButton').click(function() {
+            const username = $('#username').val(); // html id username에 작성된 input value 값 가져오기
+            const email = $('#email').val();       // html id email에 작성된 input value 값 가져오기
+            $.ajax({
+                url: '/login',
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // www web 사이트에서 글자값만 전송, 한글도 작성 가능
+                data: {
+                    /* controller에 넘겨줄 키 명칭 : 위에서 작성한 변수명으로 controller에 클라이언트가 작성한 데이터를 넘겨줌 */
+                    username: username, //@RequestParam String username: $('#username').val()
+                    email: email //  @RequestParam String email: $('#email').val()
+                },
+                success: function(response) {
+                    if (response.loggedIn) { /* 로그인 성공했을 경우 */
+                        alert(response.message); // alert 창으로 로그인 성공 메세지 보여주고
+                        window.location.href='/'; // 메인으로 이동
+                    } else {                /* 로그인 실패했을 경우 */
+                        $('#responseMessage').text(response.message); // form 태그 밑에 p태그 안에 로그인 실패 메세지 보여주기
+                    }
+                },
+                /* 문제가 생겼을 때 발생 */
+                error: function() {
+                    alert('서버 요청 중 오류가 발생했습니다.');
+                }
+
+            })
+
+        })
+    })
+</script>
 <th:block th:replace="~{layout/footer :: footer}"></th:block>
 </body>
 </html>
