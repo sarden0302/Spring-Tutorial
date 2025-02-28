@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kh.edu.test.FoodCompany.mapper.SnackMapper">
+    <!-- 과자 등록 [POST] /api/snacks -->
+    <insert id="insertSnack">
+        INSERT INTO snacks (snack_name, snack_brand, snack_weight_g, snack_price, snack_stock,
+                            snack_category, snack_spicy, snack_allergy_info, snack_expiration_date)
+        VALUES (#{snackName}, #{snackBrand}, #{snackWeightG}, #{snackPrice}, #{snackStock},
+                #{snackCategory}, #{snackSpicy}, #{snackAllergyInfo}, #{snackExpirationDate})
+    </insert>
+
+    <!-- 과자 전체 조회 [POST] /api/snacks -->
+    <select id="getAllSnacks">
+        SELECT *
+        FROM snacks
+        ORDER BY snack_id DESC
+    </select>
+
+    <!-- 과자 상세 조회 [GET] /api/snacks/{snackId} -->
+    <select id="getSnackById">
+        SELECT *
+        FROM snacks
+        WHERE snack_id = #{snackId}
+    </select>
+
+    <!-- 과자 수정 [PUT] /api/snacks/{snackId} -->
+    <update id="updateSnack">
+        UPDATE snacks
+        SET snack_name            = #{snackName},
+            snack_brand           = #{snackBrand},
+            snack_weight_g        = #{snackWeightG},
+            snack_price           = #{snackPrice},
+            snack_stock           = #{snackStock},
+            snack_category        = #{snackCategory},
+            snack_spicy           = #{snackSpicy},
+            snack_allergy_info    = #{snackAllergyInfo},
+            snack_expiration_date = #{snackExpirationDate}
+        WHERE snack_id = #{snackId}
+    </update>
+
+    <!-- 과자 삭제 [DELETE] /api/snacks/{snackId} -->
+    <delete id="deleteSnack">
+        DELETE
+        FROM snacks
+        WHERE snack_id = #{snackId}
+    </delete>
+
+</mapper>
